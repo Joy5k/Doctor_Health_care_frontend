@@ -1,10 +1,11 @@
+import React from "react";
 
-const page = () => {
-    return (
-        <div>
-            <h3>This is register</h3>
-        </div>
-    );
+const RegisterPage = () => {
+  return (
+    <div>
+      <h1>Register Here</h1>
+    </div>
+  );
 };
 
-export default page;
+export default RegisterPage;

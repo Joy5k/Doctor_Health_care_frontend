@@ -1,10 +1,9 @@
-
-const page = () => {
-    return (
-        <div>
-            <h3>This is login page</h3>
-        </div>
-    );
+const LoginPage = () => {
+  return (
+    <div>
+      <h1>Login Here</h1>
+    </div>
+  );
 };
 
-export default page;
+export default LoginPage;
