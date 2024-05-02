@@ -1,3 +1,6 @@
+"use client"
+
+
 import assets from "@/assets";
 import {
   Box,
@@ -10,8 +13,23 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import { useForm, SubmitHandler } from "react-hook-form"
+
+
+type Inputs = {
+  email: string
+  password: string
+}
+
 
 const LoginPage = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>()
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
   return (
     <Container>
       <Stack
@@ -49,13 +67,17 @@ const LoginPage = () => {
         </Box>
       </Stack>
       <Box>
+        <form onSubmit={handleSubmit(onSubmit)}>
+
+       
         <Grid container spacing={2} my="1">
           <Grid item md={6}>
             <TextField
               label="Email"
               type="email"
               variant="outlined"
-              fullWidth={true}
+                fullWidth={true}
+                {...register("email")}
             />
           </Grid>
           <Grid item md={6}>
@@ -63,18 +85,20 @@ const LoginPage = () => {
               label="Password"
               type="password"
               variant="outlined"
-              fullWidth={true}
+                fullWidth={true}
+                {...register("password")}
             />
           </Grid>
         </Grid>
         <Typography mb={1} component="p" fontWeight={300}>
           Forget Password
         </Typography>
-        <Button fullWidth={true}>Login</Button>
+        <Button type="submit" fullWidth={true}>Login</Button>
         <Typography component="p" fontWeight={300}>
           Don&apos;t have an account?
           <Link href="/register">Create an account</Link>
-        </Typography>
+          </Typography>
+          </form>
       </Box>
     </Container>
   );
