@@ -13,6 +13,7 @@ const assets = {
     doctor3: require("./images/doctor3.png"),
     stethoscope: require("./images/Stetoscope.png"),
     familyOnBeach: require("./images/familyOnBeach.png"),
+    chooseUs:require("./choose-us.png")
   },
   svgs: {
     logo: require("./svgs/logo.svg"),

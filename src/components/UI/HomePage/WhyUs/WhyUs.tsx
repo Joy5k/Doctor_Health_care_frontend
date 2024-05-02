@@ -1,5 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import assets from "@/assets";
+import Image from "next/image";
 
 const servicesData = [
   {
@@ -45,6 +46,29 @@ const WhyUs = () => {
             Why Choose Us
           </Typography>
         </Box>
+        <Container>
+          <Box>
+            <Image
+              src={assets.images.chooseUs}
+              alt="award"
+              width={400}
+              height={100}
+            ></Image>
+          </Box>
+          <Box sx={{
+            display:"flex",
+            
+          }}>
+            <Box>
+              <Image
+                src={servicesData[0].imageSrc}
+                alt="award"
+                width={50}
+                height={50}
+              ></Image>
+            </Box>
+          </Box>
+        </Container>
       </Box>
     </Container>
   );
