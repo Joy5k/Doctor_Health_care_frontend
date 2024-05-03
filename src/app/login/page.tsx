@@ -2,6 +2,7 @@
 
 
 import assets from "@/assets";
+import { userLogin } from "@/services/actions/userLogin";
 import {
   Box,
   Button,
@@ -16,7 +17,7 @@ import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form"
 
 
-type Inputs = {
+export type FormValues = {
   email: string
   password: string
 }
@@ -28,8 +29,15 @@ const LoginPage = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  } = useForm<FormValues>()
+  const onSubmit: SubmitHandler<FormValues> = async(values) => {
+ 
+    try {
+     const res=await userLogin(values)
+    } catch (error:any) {
+      console.log(error.message);
+    }
+  }
   return (
     <Container>
       <Stack
