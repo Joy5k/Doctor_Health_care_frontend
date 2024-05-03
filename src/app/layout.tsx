@@ -23,8 +23,9 @@ export default function RootLayout({
         <body className={inter.className}>
           <AppRouterCacheProvider>
             <>
-            <Toaster />
-            {children}
+              <Toaster position="top-center" />
+              
+              {children}
             </>
           </AppRouterCacheProvider>
         </body>
