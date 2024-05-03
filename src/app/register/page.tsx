@@ -1,3 +1,4 @@
+"use client"
 import {
   Container,
   Stack,
@@ -52,26 +53,26 @@ const RegisterPage = () => {
      
     >
       <Stack
-        sx={{
-          height:"100vh",
+         sx={{
+          height: "100vh",
           justifyContent: "center",
-          alignItem: "center",
+          alignItems: "center",
         }}
       >
         <Box
           sx={{
-            maxWidth: "600",
+            maxWidth: 600,
             width: "100%",
             boxShadow: 1,
-            borderRe: 1,
+            borderRadius: 1,
             p: 4,
-            textAlign: "center"
+            textAlign: "center",
           }}
         >
           <Stack
-            sx={{
+             sx={{
               justifyContent: "center",
-              alignItem: "center",
+              alignItems: "center",
             }}
           >
             <Box>
@@ -131,7 +132,15 @@ const RegisterPage = () => {
                 />
               </Grid>
             </Grid>
-            <Button fullWidth={true}>Register</Button>
+            <Button
+                sx={{
+                  margin: "10px 0px",
+                }}
+                fullWidth={true}
+                type="submit"
+              >
+                Register
+              </Button>
             <Typography component="p" fontWeight={300}>
               Do You have an account ?<Link href="/login">Login</Link>
               </Typography>
