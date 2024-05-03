@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { modifyPayload } from "@/utils/modifyPayload";
+import { registerPatient } from "@/services/actions/registerPatient";
 
 
 interface IPatientData{
@@ -31,8 +32,13 @@ const RegisterPage = () => {
     watch,
     formState: { errors },
   } = useForm<IPatientRegisterFormData>()
-  const onSubmit: SubmitHandler<IPatientRegisterFormData> = (values) => {
-    const data=modifyPayload(values)
+  const onSubmit: SubmitHandler<IPatientRegisterFormData> = async(values) => {
+    const data = modifyPayload(values)
+    try {
+      const res=await registerPatient(data)
+    } catch (error:any) {
+      console.log(error.message);
+    }
   }
   return (
     <Container
