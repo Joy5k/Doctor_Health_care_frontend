@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 export type FormValues = {
@@ -22,6 +23,7 @@ export type FormValues = {
 };
 
 const LoginPage = () => {
+  const router=useRouter()
   const {
     register,
     handleSubmit,
@@ -33,6 +35,7 @@ const LoginPage = () => {
       const res = await userLogin(values);
       if (res.data.accessToken) {
         storeUserInfo({ accessToken: res.data.accessToken });
+        router.push('/')
       }
     } catch (error: any) {
       console.log(error.message);
@@ -95,7 +98,7 @@ const LoginPage = () => {
                   />
                 </Grid>
               </Grid>
-              <Link href={"/forgot-password"}>
+              <Link href={"/"}>
                 <Typography
                   mb={1}
                   textAlign="end"
