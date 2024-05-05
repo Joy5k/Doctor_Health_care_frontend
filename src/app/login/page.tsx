@@ -1,6 +1,7 @@
 "use client";
 
 import assets from "@/assets";
+import PHForms from "@/components/Forms/PHForms";
 import { storeUserInfo } from "@/services/actions/auth.services";
 import { userLogin } from "@/services/actions/userLogin";
 import {
@@ -15,22 +16,15 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm, SubmitHandler } from "react-hook-form";
+import {  FieldValues } from "react-hook-form";
 
-export type FormValues = {
-  email: string;
-  password: string;
-};
+
 
 const LoginPage = () => {
   const router=useRouter()
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<FormValues>();
-  const onSubmit: SubmitHandler<FormValues> = async (values) => {
+ 
+  const handleLogin = async (values: FieldValues
+  ) => {
     try {
       const res = await userLogin(values);
       if (res.data.accessToken) {
@@ -77,7 +71,7 @@ const LoginPage = () => {
           </Stack>
 
           <Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <PHForms onSubmit={handleLogin}>
               <Grid container spacing={2} my="1">
                 <Grid item md={6}>
                   <TextField
@@ -118,7 +112,7 @@ const LoginPage = () => {
                 Don&apos;t have an account?
                 <Link href="/register">Create an account</Link>
               </Typography>
-            </form>
+            </PHForms>
           </Box>
         </Box>
       </Stack>
