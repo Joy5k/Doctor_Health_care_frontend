@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 export const validationSchema = z.object({
   email: z.string().email("Please Enter valid email address"),
@@ -27,13 +28,15 @@ export const validationSchema = z.object({
 
 const LoginPage = () => {
   const router = useRouter();
-
+  const [error, setError] = useState("");
   const handleLogin = async (values: FieldValues) => {
     try {
       const res = await userLogin(values);
       if (res.data.accessToken) {
         storeUserInfo({ accessToken: res.data.accessToken });
         router.push("/");
+      } else {
+        setError(res.message);
       }
     } catch (error: any) {
       console.log(error.message);
@@ -74,7 +77,21 @@ const LoginPage = () => {
               </Typography>
             </Box>
           </Stack>
-
+          {error && (
+                  <Box>
+                     <Typography
+                        sx={{
+                           backgroundColor: 'red',
+                           padding: '1px',
+                           borderRadius: '2px',
+                           color: 'white',
+                           marginTop: '5px',
+                        }}
+                     >
+                        {error}
+                     </Typography>
+                  </Box>
+               )}
           <Box>
             <PHForms
               onSubmit={handleLogin}
