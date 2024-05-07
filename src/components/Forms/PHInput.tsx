@@ -6,10 +6,10 @@ type TInputProps = {
   label?: string;
   type?: string;
   size?: "small" | "medium";
-    fullWidth: boolean;
-    sx?: SxProps;
-    placeholder?: string;
-    required?: boolean;
+  fullWidth: boolean;
+  sx?: SxProps;
+  placeholder?: string;
+  required?: boolean;
 };
 
 const PHInput = ({
@@ -17,10 +17,10 @@ const PHInput = ({
   label,
   type = "text",
   size = "small",
-    fullWidth,
-    sx,
-    required,
-    placeholder
+  fullWidth,
+  sx,
+  required,
+  placeholder,
 }: TInputProps) => {
   const { control } = useFormContext();
   return (
@@ -28,16 +28,18 @@ const PHInput = ({
       <Controller
         control={control}
         name={name}
-        render={({ field }) => (
-            <TextField
-                sx={{...sx}}
+        render={({ field,fieldState:{error} }) => (
+          <TextField
+            sx={{ ...sx }}
             label={label}
             type={type}
             size={size}
             variant="outlined"
-                fullWidth={fullWidth}
-                placeholder={label}
+            fullWidth={fullWidth}
+            placeholder={label}
                 required={required}
+                error={!!error?.message}
+                helperText={error?.message}
           />
         )}
       />

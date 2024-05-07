@@ -18,13 +18,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
-
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const validationSchema = z.object({
-  
-})
-
-
+  email: z.string().email("Please Enter valid email address"),
+  password: z.string().min(6, "Must be at least 6 characters"),
+});
 
 const LoginPage = () => {
   const router = useRouter();
@@ -40,6 +39,7 @@ const LoginPage = () => {
       console.log(error.message);
     }
   };
+
   return (
     <Container>
       <Stack
@@ -76,7 +76,14 @@ const LoginPage = () => {
           </Stack>
 
           <Box>
-            <PHForms onSubmit={handleLogin}>
+            <PHForms
+              onSubmit={handleLogin}
+              resolver={zodResolver(validationSchema)}
+              defaultValues={{
+                email: "",
+                password: "",
+              }}
+            >
               <Grid container spacing={2} my="1">
                 <Grid item md={6}>
                   <PHInput
