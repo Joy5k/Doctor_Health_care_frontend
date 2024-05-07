@@ -1,7 +1,8 @@
 "use client";
-
+import { z } from "zod";
 import assets from "@/assets";
 import PHForms from "@/components/Forms/PHForms";
+import PHInput from "@/components/Forms/PHInput";
 import { storeUserInfo } from "@/services/actions/auth.services";
 import { userLogin } from "@/services/actions/userLogin";
 import {
@@ -16,20 +17,24 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {  FieldValues } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
+
+
+export const validationSchema = z.object({
+  
+})
 
 
 
 const LoginPage = () => {
-  const router=useRouter()
- 
-  const handleLogin = async (values: FieldValues
-  ) => {
+  const router = useRouter();
+
+  const handleLogin = async (values: FieldValues) => {
     try {
       const res = await userLogin(values);
       if (res.data.accessToken) {
         storeUserInfo({ accessToken: res.data.accessToken });
-        router.push('/')
+        router.push("/");
       }
     } catch (error: any) {
       console.log(error.message);
@@ -38,21 +43,21 @@ const LoginPage = () => {
   return (
     <Container>
       <Stack
-       sx={{
-        height: '100vh',
-        justifyContent: 'center',
-        alignItems: 'center',
-     }}
+        sx={{
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <Box
           sx={{
             maxWidth: 600,
-            width: '100%',
+            width: "100%",
             boxShadow: 1,
             borderRadius: 1,
             p: 4,
-            textAlign: 'center',
-         }}
+            textAlign: "center",
+          }}
         >
           <Stack
             sx={{
@@ -74,21 +79,21 @@ const LoginPage = () => {
             <PHForms onSubmit={handleLogin}>
               <Grid container spacing={2} my="1">
                 <Grid item md={6}>
-                  <TextField
+                  <PHInput
+                    name="email"
                     label="Email"
                     type="email"
-                    variant="outlined"
                     fullWidth={true}
-                    {...register("email")}
+                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <PHInput
+                    name="password"
                     label="Password"
                     type="password"
-                    variant="outlined"
                     fullWidth={true}
-                    {...register("password")}
+                    required={true}
                   />
                 </Grid>
               </Grid>
