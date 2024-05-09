@@ -14,6 +14,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import assets from "@/assets";
 import Image from "next/image";
+import Link from "next/link";
 const Sidebar = () => {
   const drawer = (
     <div>
@@ -48,9 +49,20 @@ const Sidebar = () => {
   );
   return (
     <Box>
-      <Stack>
+      <Stack
+        sx={{
+          py: 1,
+          mt: 1,
+        }}
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+              gap={1}
+              component={Link}
+              href="/"
+      >
         <Image src={assets.svgs.logo} width={40} height={40} alt="logo" />
-        <Typography variant="h6" component="h1">
+        <Typography variant="h6" component="h1" sx={{cursor:"pointer"}}>
           PH Health care
         </Typography>
       </Stack>
