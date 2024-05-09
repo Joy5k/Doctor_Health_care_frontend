@@ -16,4 +16,21 @@ export interface DrawerItem {
     icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string };
     child?: DrawerItem[];
   }
+  export type ResponseSuccessType = {
+    data: any;
+    meta?: IMeta;
+  };
   
+  export type IGenericErrorResponse = {
+    statusCode: number;
+    message: string;
+    errorMessages: IGenericErrorMessage[];
+  };
+  
+  
+  export type IGenericErrorMessage = {
+    path: string | number;
+    message: string;
+  };
+  
+  export const Gender = ["MALE", "FEMALE"];
