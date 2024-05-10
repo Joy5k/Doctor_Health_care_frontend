@@ -6,7 +6,7 @@ import axios from 'axios';
 // import { setAccessToken } from '../../services/actions/setAccessToken';
 import { IGenericErrorResponse, ResponseSuccessType } from '@/types';
 import { getNewAccessToken } from '@/services/actions/auth.services';
-import setAccessToken from '@/services/actions/setAccesstoken';
+import setAccessToken from '@/services/actions/setAccessToken';
 
 const instance = axios.create();
 instance.defaults.headers.post['Content-Type'] = 'application/json';
