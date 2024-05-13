@@ -1,4 +1,4 @@
-import PHdatePicker from "@/components/Forms/PHdatePicker";
+import PHDatePicker from "@/components/Forms/PHdatePicker";
 import PHForms from "@/components/Forms/PHForms";
 import PHModal from "@/components/Shared/PHModal/PHModal";
 import { Button } from "@mui/material";
@@ -22,7 +22,7 @@ const ScheduleModal =({open,setOpen}:TProps) => {
     return (
         <PHModal open={isModalOpen} setOpen={setIsModalOpen} title="Create Schedule">
             <PHForms onSubmit={handleFormSubmit}>
-                <PHdatePicker></PHdatePicker>
+                <PHDatePicker  name="startDate" size="small"></PHDatePicker>
                 <Button type="submit">Create Schedule</Button>
             </PHForms>
         </PHModal>
