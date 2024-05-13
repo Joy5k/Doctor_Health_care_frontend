@@ -1,4 +1,4 @@
-import PHDatePicker from "@/components/Forms/PHdatePicker";
+import PHDatePicker from "@/components/Forms/PHDatePicker";
 import PHForms from "@/components/Forms/PHForms";
 import PHModal from "@/components/Shared/PHModal/PHModal";
 import { useCreateScheduleMutation } from "@/redux/api/scheduleApi";
