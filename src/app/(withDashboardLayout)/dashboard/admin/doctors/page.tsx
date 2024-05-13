@@ -5,10 +5,16 @@ import { useGetAllDoctorsQuery } from "@/redux/api/doctorApi";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Image from "next/image";
+import { toast } from "sonner";
 
 const DoctorPage = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-    const { data } = useGetAllDoctorsQuery({})
+    const query:Record<string,any> = {}
+    const [searchTerm, setSearchTerm] = useState<string>("")
+    query["searchTerm"]=searchTerm
+
+
+    const { data ,isLoading} = useGetAllDoctorsQuery({...query})
     const doctors = data?.doctors;
     const meta = data?.meta;
 
@@ -27,6 +33,8 @@ const DoctorPage = () => {
         { field: "name", headerName: "Name", flex:1 },
         { field: "email", headerName: "Email", flex:1 },
         { field: "contactNumber", headerName: "Contact Number", flex:1 },
+        { field: "gender", headerName: "Gender", flex:1 },
+        { field: "appointmentFee", headerName: "Appointment Fee", flex:1 },
      
         {
           field: "Action",
@@ -48,7 +56,7 @@ const DoctorPage = () => {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Button onClick={()=>setIsModalOpen(true)}>Create New Doctor</Button>
               <DoctorModal open={isModalOpen} setOpen={setIsModalOpen}></DoctorModal>
-        <TextField size="small" placeholder="Search doctor"></TextField>
+        <TextField  onChange={(e)=>setSearchTerm(e.target.value)} size="small" placeholder="Search doctor"></TextField>
           </Stack>
           {!isLoading ? (
         <Box my={2}>
