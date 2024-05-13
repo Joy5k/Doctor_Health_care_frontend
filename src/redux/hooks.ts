@@ -7,20 +7,20 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
 
 type TDebouncedProps = {
-  searchTerm: string;
+  searchQuery: string;
   delay: number;
 };
 
-export const useDebounced = ({ searchTerm, delay }: TDebouncedProps) => {
-    const[debouncedValue,setDebouncedValue] = useState<string>(searchTerm)
+export const useDebounced = ({ searchQuery, delay }: TDebouncedProps) => {
+    const[debouncedValue,setDebouncedValue] = useState<string>(searchQuery)
     useEffect(() => {
         const handler = setTimeout(() => {
-          setDebouncedValue(searchTerm)
+          setDebouncedValue(searchQuery)
         }, delay)
         return () => {
             clearTimeout(handler)
         }
-  },[searchTerm,delay])
+  },[searchQuery,delay])
   
   
   
