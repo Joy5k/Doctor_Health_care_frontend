@@ -1,22 +1,19 @@
-"use client";
 import * as React from "react";
-
-import { SxProps, styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-
+import ListItemText from "@mui/material/ListItemText";
+import ListItemButton from "@mui/material/ListItemButton";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
-
-export const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
+import { DialogContent, DialogTitle, SxProps } from "@mui/material";
+import { BootstrapDialog } from "./PHModal";
 
 type TModalProps = {
   open: boolean;
@@ -26,13 +23,26 @@ type TModalProps = {
   sx?: SxProps;
 };
 
-export default function PHModal({
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+export default function PHFullScreenModal({
   open = false,
   setOpen,
   title = "",
   children,
   sx,
 }: TModalProps) {
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -62,7 +72,6 @@ export default function PHModal({
         </IconButton>
         <DialogContent dividers>{children}</DialogContent>
       </BootstrapDialog>
-      
     </React.Fragment>
   );
 }
