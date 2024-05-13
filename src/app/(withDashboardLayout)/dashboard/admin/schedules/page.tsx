@@ -9,7 +9,7 @@ const SchedulesPage = () => {
     return (
         <Box>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Button onClick={() => setIsModalOpen(true)}>Create New Doctor</Button>
+          <Button onClick={() => setIsModalOpen(true)}>Create Schedules</Button>
           <DoctorModal open={isModalOpen} setOpen={setIsModalOpen}></DoctorModal>
           <TextField
             // onChange={(e) => setSearchTerm(e.target.value)}
