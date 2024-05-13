@@ -7,8 +7,8 @@ import { Controller, useFormContext } from "react-hook-form";
 
 interface IDatePicker {
   name: string;
-  size: "small" | "medium";
-  label?: boolean;
+  size?: "small" | "medium";
+  label?: string;
   required?: boolean;
   fullWidth?: boolean;
   sx?: SxProps;
@@ -30,7 +30,8 @@ const PHDatePicker = ({
       render={({ field: { onChange, value, ...field } }) => {
         return (
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DesktopDatePicker
+                <DesktopDatePicker
+                    label={label}
               timezone="system"
               disablePast
               {...field}
