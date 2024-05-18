@@ -1,11 +1,11 @@
 import PHDatePicker from "@/components/Forms/PHDatePicker";
 import PHForms from "@/components/Forms/PHForms";
-import PHTimePicker from "@/components/Forms/PHTimePicker";
 import PHModal from "@/components/Shared/PHModal/PHModal";
 import { useCreateScheduleMutation } from "@/redux/api/scheduleApi";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { timeFormatter } from "@/utils/timeFormatter";
 import { Button, Grid } from "@mui/material";
+import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -15,15 +15,14 @@ type TProps = {
 };
 
 const ScheduleModal = ({ open, setOpen }: TProps) => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [createSchedule] = useCreateScheduleMutation();
 
   const handleFormSubmit = async (values: FieldValues) => {
-    // console.log(values);
     values.startDate = dateFormatter(values.startDate);
     values.endDate = dateFormatter(values.endDate);
     values.startTime = timeFormatter(values.startTime);
     values.endTime = timeFormatter(values.endTime);
-    // console.log(values);
     try {
       const res = await createSchedule(values).unwrap();
       // console.log(res);
@@ -31,30 +30,33 @@ const ScheduleModal = ({ open, setOpen }: TProps) => {
         toast.success("Schedules created successfully!");
         setOpen(false);
       }
-    } catch (err: any) {
-      console.error(err.message);
+    } catch (error: any) {
+      console.error(error.message);
     }
   };
-
   return (
-    <PHModal open={open} setOpen={setOpen} title="Create Schedule">
+    <PHModal
+      open={isModalOpen}
+      setOpen={setIsModalOpen}
+      title="Create Schedule"
+    >
       <PHForms onSubmit={handleFormSubmit}>
         <Grid container spacing={2} sx={{ width: "400px" }}>
-          <Grid item md={12}>
-            <PHDatePicker name="startDate" label="Start Date" />
+          <Grid item spacing={12}>
+            <PHDatePicker name="startDate" label="Start Date"></PHDatePicker>
           </Grid>
-          <Grid item md={12}>
-            <PHDatePicker name="endDate" label="End Date" />
+          <Grid item spacing={12}>
+            <PHDatePicker name="endDate" label="End Date"></PHDatePicker>
           </Grid>
-          <Grid item md={6}>
-            <PHTimePicker name="startTime" label="Start Time" />
+          <Grid item spacing={6}>
+            <PHDatePicker name="startTime" label="Start Time"></PHDatePicker>
           </Grid>
-          <Grid item md={6}>
-            <PHTimePicker name="endTime" label="End Time" />
+          <Grid item spacing={6}>
+            <PHDatePicker name="endTIme" label="End Time"></PHDatePicker>
           </Grid>
         </Grid>
         <Button type="submit" sx={{ mt: 1 }}>
-          Create
+          Create{" "}
         </Button>
       </PHForms>
     </PHModal>

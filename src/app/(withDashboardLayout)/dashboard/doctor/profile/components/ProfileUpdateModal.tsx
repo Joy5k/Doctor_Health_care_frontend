@@ -1,120 +1,213 @@
-import { Box, Stack, styled, Typography } from '@mui/material';
+/* eslint-disable react-hooks/exhaustive-deps */
 
-const StyledInformationBox = styled(Box)(({ theme }) => ({
-   background: '#f4f7fe',
-   borderRadius: theme.spacing(1),
-   width: '45%',
-   padding: '8px 16px',
-   '& p': {
-      fontWeight: 600,
-   },
-}));
+import React, { useEffect, useState } from "react";
 
-const DoctorInformation = ({ data }: any) => {
-   return (
-      <>
-         <Typography variant='h5' color='primary.main' mb={2}>
-            Personal Information
-         </Typography>
+import PHFullScreenModal from "@/components/Shared/PHModal/PHFullScreenModal";
+import {
+  useGetDoctorQuery,
+  useUpdateDoctorMutation,
+} from "@/redux/api/doctorApi";
+import { FieldValues } from "react-hook-form";
+import { Button, Grid } from "@mui/material";
+import PHInput from "@/components/Forms/PHInput";
+import PHSelectField from "@/components/Forms/PHSelectField";
+import { Gender } from "@/types";
+import MultipleSelectChip from "./MultipleSelectChip";
+import { useGetAllSpecialtiesQuery } from "@/redux/api/specialtiesApi";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import PHForms from "@/components/Forms/PHForms";
 
-         <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            gap={2}
-            flexWrap={'wrap'}
-         >
-            <StyledInformationBox>
-               <Typography color='secondary' variant='caption'>
-                  Role
-               </Typography>
-               <Typography>{data?.role}</Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography color='secondary' variant='caption'>
-                  Name
-               </Typography>
-               <Typography>{data?.name}</Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography color='secondary' variant='caption'>
-                  Email
-               </Typography>
-               <Typography>{data?.email}</Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography color='secondary' variant='caption'>
-                  Gender
-               </Typography>
-               <Typography>{data?.gender}</Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography variant='caption' color='secondary'>
-                  Designation
-               </Typography>
-               <Typography>{data?.designation}</Typography>
-            </StyledInformationBox>
-         </Stack>
-
-         <Typography variant='h5' my={2} color={'primary.main'}>
-            Professional Information
-         </Typography>
-         <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            flexWrap={'wrap'}
-            gap={2}
-         >
-            <StyledInformationBox>
-               <Typography variant='caption' color='secondary'>
-                  Anointment Fee
-               </Typography>
-               <Typography>{data?.apointmentFee}</Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography variant='caption' color='secondary'>
-                  Qualification
-               </Typography>
-               <Typography>{data?.qualification}</Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography variant='caption' color='secondary'>
-                  Current Working Place
-               </Typography>
-               <Typography>{data?.currentWorkingPlace}</Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography variant='caption' color='secondary'>
-                  Joined
-               </Typography>
-               <Typography>
-                  {data
-                     ? new Date(data.createdAt).toLocaleDateString('en-US', {
-                          month: '2-digit',
-                          day: '2-digit',
-                          year: '2-digit',
-                       })
-                     : null}
-               </Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography variant='caption' color='secondary'>
-                  Current Status
-               </Typography>
-               <Typography>{data?.status}</Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography variant='caption' color='secondary'>
-                  Average Rating
-               </Typography>
-               <Typography>{data?.averageRating}</Typography>
-            </StyledInformationBox>
-            <StyledInformationBox>
-               <Typography variant='caption' color='secondary'>
-                  experience
-               </Typography>
-               <Typography>{data?.experience}</Typography>
-            </StyledInformationBox>
-         </Stack>
-      </>
-   );
+type TProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  id: string;
 };
 
-export default DoctorInformation;
+const validationSchema = z.object({
+  experience: z.preprocess(
+    (x) => (x ? x : undefined),
+    z.coerce.number().int().optional()
+  ),
+  apointmentFee: z.preprocess(
+    (x) => (x ? x : undefined),
+    z.coerce.number().int().optional()
+  ),
+  name: z.string().optional(),
+  contactNumber: z.string().optional(),
+  registrationNumber: z.string().optional(),
+  gender: z.string().optional(),
+  qualification: z.string().optional(),
+  currentWorkingPlace: z.string().optional(),
+  designation: z.string().optional(),
+});
+
+const ProfileUpdateModal = ({ open, setOpen, id }: TProps) => {
+  const { data: doctorData, refetch, isSuccess } = useGetDoctorQuery(id);
+  const { data: allSpecialties } = useGetAllSpecialtiesQuery(undefined);
+  const [selectedSpecialtiesIds, setSelectedSpecialtiesIds] = useState([]);
+
+  const [updateDoctor, { isLoading: updating }] = useUpdateDoctorMutation();
+
+  useEffect(() => {
+    if (!isSuccess) return;
+
+    setSelectedSpecialtiesIds(
+      doctorData?.doctorSpecialties.map((sp: any) => {
+        return sp.specialtiesId;
+      })
+    );
+  }, [isSuccess]);
+
+  const submitHandler = async (values: FieldValues) => {
+    const specialties = selectedSpecialtiesIds.map((specialtiesId: string) => ({
+      specialtiesId,
+      isDeleted: false,
+    }));
+
+    console.log({ id });
+    // return;
+
+    const excludedFields: Array<keyof typeof values> = [
+      "email",
+      "id",
+      "role",
+      "needPasswordChange",
+      "status",
+      "createdAt",
+      "updatedAt",
+      "isDeleted",
+      "averageRating",
+      "review",
+      "profilePhoto",
+      "registrationNumber",
+      "schedules",
+      "doctorSpecialties",
+    ];
+
+    const updatedValues = Object.fromEntries(
+      Object.entries(values).filter(([key]) => {
+        return !excludedFields.includes(key);
+      })
+    );
+
+    updatedValues.specialties = specialties;
+
+    try {
+      updateDoctor({ body: updatedValues, id });
+      await refetch();
+      setOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <PHFullScreenModal open={open} setOpen={setOpen} title="Update Profile">
+      <PHForms
+        onSubmit={submitHandler}
+        defaultValues={doctorData}
+        resolver={zodResolver(validationSchema)}
+      >
+        <Grid container spacing={2} sx={{ my: 5 }}>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput name="name" label="Name" sx={{ mb: 2 }} fullWidth />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput
+              name="email"
+              type="email"
+              label="Email"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput
+              name="contactNumber"
+              label="Contract Number"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput name="address" label="Address" sx={{ mb: 2 }} fullWidth />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput
+              name="registrationNumber"
+              label="Registration Number"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput
+              name="experience"
+              type="number"
+              label="Experience"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHSelectField
+              items={Gender}
+              name="gender"
+              label="Gender"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput
+              name="apointmentFee"
+              type="number"
+              label="ApointmentFee"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput
+              name="qualification"
+              label="Qualification"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput
+              name="currentWorkingPlace"
+              label="Current Working Place"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <PHInput
+              name="designation"
+              label="Designation"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <MultipleSelectChip
+              allSpecialties={allSpecialties}
+              selectedIds={selectedSpecialtiesIds}
+              setSelectedIds={setSelectedSpecialtiesIds}
+            />
+          </Grid>
+        </Grid>
+
+        <Button type="submit" disabled={updating}>
+          Save
+        </Button>
+      </PHForms>
+    </PHFullScreenModal>
+  );
+};
+
+export default ProfileUpdateModal;
