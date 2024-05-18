@@ -11,5 +11,5 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </Provider>
   );
-};
+}
 export default Providers;

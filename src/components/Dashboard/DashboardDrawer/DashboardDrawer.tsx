@@ -13,7 +13,7 @@ import { Avatar, Badge, Stack } from "@mui/material";
 import AccountMenu from "../AccountMenu/AccountMenu";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { useGetSingleUserQuery } from "@/redux/api/userApi";
-import Sidebar from "../Sidebar/Sidebar";
+import Sidebar from "../Sidebar/SideBar";
 
 const drawerWidth = 240;
 
@@ -41,7 +41,6 @@ export default function DashboardDrawer({
   };
 
   const { data, isLoading } = useGetSingleUserQuery({});
-  // console.log(data);
 
   return (
     <Box sx={{ display: "flex" }}>

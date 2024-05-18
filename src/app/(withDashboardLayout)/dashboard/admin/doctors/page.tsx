@@ -1,10 +1,10 @@
+'use client'
 import { Box, Button, IconButton, Stack, TextField } from "@mui/material";
 import DoctorModal from "./components/DoctorModal";
 import { useState } from "react";
 import { useDeleteDoctorMutation, useGetAllDoctorsQuery } from "@/redux/api/doctorApi";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Image from "next/image";
 import { toast } from "sonner";
 import { useDebounced } from "@/redux/hooks";
 
